@@ -7,8 +7,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.Id;
+
 import java.util.List;
+import java.util.UUID;
+
 @Service
 public class CardService {
     private final JPACardRepository jpaCardRepository;
@@ -23,13 +25,13 @@ public class CardService {
     public Page<CardData> getCard(Pageable pageable){
         return jpaCardRepository.findAll(pageable);
     }
-    public CardData getCard(Id id) {
+    public CardData getCard(UUID id) {
         return jpaCardRepository.findById(id).orElseThrow(()-> new CardNotExistExeption(id));
     }
     public void updateCard(CardData cardData){
         jpaCardRepository.save(cardData);
     }
-    public void deleteCard(Id id){
+    public void deleteCard(UUID id){
         jpaCardRepository.deleteById(id);
     }
     public List<CardData> getAllCardsByTitle (String title){

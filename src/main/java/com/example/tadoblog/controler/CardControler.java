@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.persistence.Id;
 import javax.validation.Valid;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/cards")
@@ -43,17 +43,17 @@ public class CardControler {
             return "card";
         }
         cardService.saveCard(cardData);
-        return "redirect:/cards/create?message=com.eshop.cardData.create.succ";
+        return "redirect:/cards/create?message=com.eshop.card.create.succ";
     }
 
     @GetMapping
-    public String loadCards(Model model, @PageableDefault(size = 2) @SortDefault(sort = ("title"), caseSensitive = false) Pageable pageable) {
+    public String loadCards(Model model, @PageableDefault(size = 2) @SortDefault(sort = ("cardTitle"), caseSensitive = false) Pageable pageable) {
         model.addAttribute("pageOfCards", cardService.getCard(pageable));
         return "cards";
     }
 
     @GetMapping("/update")
-    public String loadUpdateCard(Model model, Id id) {
+    public String loadUpdateCard(Model model, UUID id) {
         model.addAttribute("/card", cardService.getCard(id));
         return "/card";
     }
@@ -65,7 +65,7 @@ public class CardControler {
     }
 
     @GetMapping("/{id}/delete")
-    public String deleteCard(@PathVariable Id id) {
+    public String deleteCard(@PathVariable UUID id) {
         cardService.deleteCard(id);
         return "redirect:/cards";
     }

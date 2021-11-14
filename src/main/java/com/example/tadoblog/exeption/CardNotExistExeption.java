@@ -3,10 +3,10 @@ package com.example.tadoblog.exeption;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import javax.persistence.Id;
+import java.util.UUID;
 
 @Getter
 @AllArgsConstructor
 public class CardNotExistExeption extends RuntimeException {
-    private final Id cardId;
+    private final UUID cardId;
 }
