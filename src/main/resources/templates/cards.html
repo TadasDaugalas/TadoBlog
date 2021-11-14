@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -35,43 +35,60 @@
     </nav>
 </header>
 <main>
+    <div th:if="${not pageOfCards.hasContent()}">
+        <div class="alert alert-primary" role="alert" th:text="#{com.eshop.cards.empty.card}">
+        </div>
+    </div>
     <div class="container-fluid d-flex justify-content-center m-2">
-        <div class="card m-2" style="width: 30rem;">
-            <img src="../../../../img/Georgia_Aquarium_-_Giant_Grouper_edit.jpg" class="card-img-top image-size" alt="...">
+        <div th:each="card : ${pageOfCards.content}" class="card m-2" style="width: 30rem;">
+<!--            <img src="../../../../img/Georgia_Aquarium_-_Giant_Grouper_edit.jpg" class="card-img-top image-size" alt="...">-->
             <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                    card's content.</p>
+                <h5 th:text="${cards.cardTitle}" class="card-title"></h5>
+                <p th:text="${cards.cardText}" class="card-text"></p>
                 <a href="#" class="btn btn-primary">Read more</a>
                 <a href="#" class="btn btn-primary">Comment</a>
-            </div>
-        </div>
-        <div class="card m-2" style="width: 30rem;">
-            <img src="../../../../img/tropical-Fish.jpg" class="card-img-top image-size" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                    card's content.</p>
-                <a href="#" class="btn btn-primary">Read more</a>
+               <a th:href="@{/cards/{id}/delete(id=${cards.id})}"
+                       class="btn btn-danger"
+                       th:text="#{com.eshop.cards.delete}"></a>
             </div>
         </div>
     </div>
-    <div class="d-flex justify-content-center">
-        <nav aria-label="...">
-            <ul class="pagination">
-                <li class="page-item disabled">
-                    <a class="page-link">Previous</a>
+    <div class="row">
+        <div class="col-2">
+        </div>
+        <nav class="col-8" aria-label="Page navigation example">
+            <ul class="pagination justify-content-center"
+                th:with="order=${pageOfCards.sort.toList().get(0)},
+                sort=${order.property+','+order.direction}">
+                <li class="page-item"
+                    th:classappend="${pageOfCards.number eq 0 ? 'disabled':''}">
+                    <a class="page-link"
+                       aria-label="Previous"
+                       th:href="@{/cards/(page=${pageOfCards.number}-1,sort=${sort}+',ignorecase')}">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
                 </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item active" aria-current="page">
-                    <a class="page-link" href="#">2</a>
+                <li class="page-item"
+                    th:each="pageNumb:${#numbers.sequence(0,pageOfCards.totalPages -1)}"
+                    th:classappend="${pageNumb eq pageOfCards.number ? 'active':''}">
+                    <a class="page-link"
+                       th:href="@{cards(page=${pageNumb},sort=${sort}+',ignorecase')}"
+                       th:text="${pageNumb}+1"></a>
                 </li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
+                <li class="page-item"
+                    th:classappend="${pageOfCards.number eq pageOfCards.totalPages -1 ? 'disabled':''}">
+                    <a class="page-link"
+                       aria-label="Next"
+                       th:href="@{/cards/(page=${pageOfCards.number}+1,sort=${sort}+',ignorecase' )}"
+                    >
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
                 </li>
             </ul>
         </nav>
+<!--        <div class="col-2 text-end">-->
+<!--            <span th:text="#{com.eshop.products.table.totalProducts}+' '+${pageOfProducts.totalElements}"></span>-->
+<!--        </div>-->
     </div>
 </main>
 <div class="container">
