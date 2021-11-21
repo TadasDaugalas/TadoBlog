@@ -1,38 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Tado blogas</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="../../../../css/style.css">
-</head>
+<head th:replace="fragments/fragments :: head(#{com.example.tadoblog.title})"></head>
 <body>
-<header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
-                <div class="d-flex justify-content-center fs-3" style="width:-webkit-fill-available">
-                    Tado Blogas
-                </div>
-                <div class="navbar-nav ms-auto">
-                    <a class="nav-link active" href="#"><i class="fas fa-lock me-2"></i>Register</a>
-                    <a class="nav-link active" href="#"><i class="fas fa-lock me-2"></i>Login</a>
-                </div>
-            </div>
-        </div>
-    </nav>
+<header th:insert="fragments/fragments :: navigation">
+
 </header>
 <main>
     <div th:if="${not pageOfCards.hasContent()}">
@@ -41,13 +12,13 @@
     </div>
     <div class="container-fluid d-flex justify-content-center m-2">
         <div th:each="card : ${pageOfCards.content}" class="card m-2" style="width: 30rem;">
-<!--            <img src="../../../../img/Georgia_Aquarium_-_Giant_Grouper_edit.jpg" class="card-img-top image-size" alt="...">-->
+            <img th:src="@{/img/tropical-Fish.jpg}" class="card-img-top image-size" alt="...">
             <div class="card-body">
-                <h5 th:text="${cards.cardTitle}" class="card-title"></h5>
-                <p th:text="${cards.cardText}" class="card-text"></p>
+                <h5 th:text="${card.cardTitle}" class="card-title"></h5>
+                <p th:text="${card.cardText}" class="card-text"></p>
                 <a href="#" class="btn btn-primary">Read more</a>
                 <a href="#" class="btn btn-primary">Comment</a>
-               <a th:href="@{/cards/{id}/delete(id=${cards.id})}"
+               <a th:href="@{/cards/{id}/delete(id=${card.id})}"
                        class="btn btn-danger"
                        th:text="#{com.eshop.cards.delete}"></a>
             </div>
@@ -91,18 +62,7 @@
 <!--        </div>-->
     </div>
 </main>
-<div class="container">
-    <footer class="py-3 my-4">
-        <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Home</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Features</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Pricing</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
-        </ul>
-        <p class="text-center text-muted">© 2021 Company, Inc</p>
-    </footer>
-</div>
+<div th:replace="fragments/fragments :: footer"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
