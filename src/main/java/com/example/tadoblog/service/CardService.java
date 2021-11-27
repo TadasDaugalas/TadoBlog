@@ -37,4 +37,7 @@ public class CardService {
     public List<CardData> getAllCardsByTitle (String title){
         return jpaCardRepository.findCardDataByCardTitle(title);
     }
+    public CardData getOneCardData(UUID id){
+        return jpaCardRepository.findCardDataById(id);
+    }
 }

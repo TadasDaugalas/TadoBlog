@@ -2,6 +2,7 @@ package com.example.tadoblog.data;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.Type;
 import org.springframework.lang.Nullable;
 
@@ -23,9 +24,8 @@ public class CardData {
     @NotBlank
     private String cardTitle;
     @NotBlank
+    @Column(columnDefinition = "TEXT")
     private String cardText;
-    private String cardComments;
     @Nullable
     private int cardCommentsCounter;
-    private String cardReplies;
 }

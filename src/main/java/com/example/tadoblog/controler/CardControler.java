@@ -9,10 +9,7 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.UUID;
@@ -53,8 +50,8 @@ public class CardControler {
     }
 
     @GetMapping("/update")
-    public String loadUpdateCard(Model model, UUID id) {
-        model.addAttribute("/card", cardService.getCard(id));
+    public String loadUpdateCard(Model model,@RequestParam UUID id) {
+        model.addAttribute("card", cardService.getCard(id));
         return "/card";
     }
 
@@ -68,5 +65,10 @@ public class CardControler {
     public String deleteCard(@PathVariable UUID id) {
         cardService.deleteCard(id);
         return "redirect:/cards";
+    }
+    @GetMapping("/readMore")
+    public String loadOneCard(@RequestParam UUID id,Model model){
+        model.addAttribute("readMore",cardService.getOneCardData(id));
+        return "/readMore";
     }
 }

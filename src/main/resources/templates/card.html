@@ -25,11 +25,11 @@
 
         <div class="col-md-4">
             <label th:text="#{com.eshop.card.form.text}"></label>
-            <input class="form-control"
+            <textarea class="form-control"
                    type="text"
                    placeholder="Blod text"
                    th:field="*{cardText}"
-                   th:classappend="${#fields.hasErrors('cardText')} ? 'is-invalid' :'valid'">
+                   th:classappend="${#fields.hasErrors('cardText')} ? 'is-invalid' :'valid'"></textarea>
             <p class="invalid-feedback" th:if="${#fields.hasErrors('cardText')}" th:errors="*{cardText}"></p>
         </div>
         <button type="submit" th:text="#{com.eshop.card.form.createCard}"></button>
