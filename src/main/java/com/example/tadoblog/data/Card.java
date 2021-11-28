@@ -2,23 +2,21 @@ package com.example.tadoblog.data;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.Type;
-import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.Set;
 import java.util.UUID;
 
 
 @Setter
 @Getter
 @Entity
-@Table(name = "Cards")
-public class CardData {
+public class Card {
     @Id
     @GeneratedValue
-    @Column(columnDefinition = "varchar(36)",nullable = false,updatable = false)
+    @Column(columnDefinition = "varchar(36)", nullable = false, updatable = false)
     @Type(type = "uuid-char")
     private UUID id;
     @NotBlank
@@ -26,6 +24,6 @@ public class CardData {
     @NotBlank
     @Column(columnDefinition = "TEXT")
     private String cardText;
-    @Nullable
-    private int cardCommentsCounter;
+    @OneToMany(mappedBy = "card" ,fetch = FetchType.EAGER)
+    private Set<Comment> comments;
 }

@@ -1,6 +1,7 @@
 package com.example.tadoblog.controler;
 
-import com.example.tadoblog.data.CardData;
+import com.example.tadoblog.data.Card;
+import com.example.tadoblog.data.Comment;
 import com.example.tadoblog.service.CardService;
 import com.example.tadoblog.service.MessageService;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +28,7 @@ public class CardControler {
 
     @GetMapping("/create")
     public String loadCardForm(Model model, String message) {
-        model.addAttribute("card", new CardData());
+        model.addAttribute("card", new Card());
         if (message != null) {
             model.addAttribute("success", messageService.getMessage(message));
         }
@@ -35,11 +36,11 @@ public class CardControler {
     }
 
     @PostMapping("/create")
-    public String createCard(@Valid CardData cardData, BindingResult bindingResult) {
+    public String createCard(@Valid Card card, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "card";
         }
-        cardService.saveCard(cardData);
+        cardService.saveCard(card);
         return "redirect:/cards/create?message=com.eshop.card.create.succ";
     }
 
@@ -56,8 +57,8 @@ public class CardControler {
     }
 
     @PostMapping("/update")
-    public String updateCard(CardData cardData) {
-        cardService.updateCard(cardData);
+    public String updateCard(Card card) {
+        cardService.updateCard(card);
         return "redirect:/cards";
     }
 
@@ -69,6 +70,7 @@ public class CardControler {
     @GetMapping("/readMore")
     public String loadOneCard(@RequestParam UUID id,Model model){
         model.addAttribute("readMore",cardService.getOneCardData(id));
-        return "/readMore";
+        model.addAttribute("comment",new Comment());
+        return "readMore";
     }
 }

@@ -5,7 +5,7 @@
 <header th:insert="fragments/fragments :: navigation"></header>
 <main>
  <div class="container">
-  <form th:method="get" th:object="${readMore}">
+
    <div class="container">
    <div class="col background-white py-3">
     <div class="clearfix">
@@ -15,15 +15,36 @@
    </div>
    </div>
    <div class="container">
-    <form>
      <div class="input-group mb-3">
-      <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
-      <button class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>
+      <form th:method="post" th:object="${comment}" th:action="@{/cards/readMore/{id}/addComment(id=${readMore.id})}">
+      <input type="text"
+             class="form-control"
+             placeholder="Recipient's username"
+             th:field="*{commentText}">
+      <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Add Comment</button>
+      </form>
      </div>
-    </form>
+
     Comments
+    <div th:each="comment : ${readMore.comments}" th:if="${comment.getParentComment() == null}">
+        <div th:text="${comment.commentText}"></div>
+
+        <div class="ps-5"
+                th:each="childComment : ${readMore.comments}"
+             th:if="${childComment.getParentComment() != null && childComment.getParentComment().getId().equals(comment.getId())}"
+        th:text="${childComment.commentText}">
+
+        </div>
+
+            <form  th:method="post" th:object="${comment}" th:action="@{/cards/readMore/{id}/addComment/{commentId}(id=${readMore.id},commentId=${comment.id})}">
+        <input type="text"
+                       class="form-control"
+                       placeholder="Recipient's username"
+                       th:field="*{commentText}">
+                <button class="btn btn-outline-secondary" type="submit" id="button-addon">Add Comment</button>
+            </form>
+    </div>
    </div>
-  </form>
  </div>
 </main>
 <footer th:replace="fragments/fragments :: footer"></footer>
