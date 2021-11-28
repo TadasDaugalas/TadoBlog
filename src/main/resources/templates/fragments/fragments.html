@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head th:fragment="head(title)">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,13 +21,22 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <form class="d-flex">
                 <a th:href="@{/public/cards}" class="btn btn-success"> <i class="fa fa-arrow-circle-o-left"></i>&nbsp;Home</a>
+                <a sec:authorize="hasRole('ADMIN')"
+                   th:href="@{/private/cards/create}"
+                   class="btn btn-success ms-3"
+                   style="width: 150px">
+                    <i class="fa fa-arrow-circle-o-left"></i>&nbsp;Create Blog</a>
             </form>
             <div class="d-flex justify-content-center fs-3" style="width:-webkit-fill-available">
                 Tado Blogas
             </div>
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link active" href="#"><i class="fas fa-lock me-2"></i>Register</a>
-                <a class="nav-link active" href="#"><i class="fas fa-lock me-2"></i>Login</a>
+            <div sec:authorize="isAnonymous()" class="navbar-nav ms-auto">
+                <a class="nav-link active" th:href="@{/public/users/create}"><i class="fas fa-lock me-2"></i>Register</a>
+                <a class="nav-link active" th:href="@{/customLogin}"><i class="fas fa-lock me-2"></i>Login</a>
+            </div>
+            <div  class="d-flex" sec:authorize="isAuthenticated()">
+                <h4 style="margin: auto" sec:authentication="principal.name"></h4>
+                <a class="nav-link active" th:href="@{/logout}"><i class="fas fa-lock me-2"></i>LogOut</a>
             </div>
         </div>
     </div>

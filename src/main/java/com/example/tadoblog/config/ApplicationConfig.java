@@ -48,13 +48,13 @@ public class ApplicationConfig implements WebMvcConfigurer {
 //        localValidatorFactoryBean.setValidationMessageSource(messageSource());
 //        return localValidatorFactoryBean;
 //    }
-//@Override
-//public void addViewControllers(ViewControllerRegistry registry) {
-//    registry.addViewController("/customLogin").setViewName("login");
-//    registry.addRedirectViewController("/", "/cards");
-//}
 @Override
 public void addViewControllers(ViewControllerRegistry registry) {
     registry.addViewController("/customLogin").setViewName("login");
+    registry.addRedirectViewController("/", "/public/cards");
 }
+//@Override
+//public void addViewControllers(ViewControllerRegistry registry) {
+//    registry.addViewController("/customLogin").setViewName("login");
+//}
 }

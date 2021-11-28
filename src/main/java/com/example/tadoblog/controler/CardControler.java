@@ -49,7 +49,7 @@ public class CardControler {
             return "card";
         }
         cardService.saveCard(card);
-        return "redirect:/private/cards/create?message=com.eshop.card.create.succ";
+        return "redirect:/public/cards/";
     }
 
     @GetMapping("/public/cards")

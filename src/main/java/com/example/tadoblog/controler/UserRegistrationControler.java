@@ -41,6 +41,6 @@ public class UserRegistrationControler {
         }
         userService.createNewUser(userRegistration);
 
-        return "redirect:/public/users/create";
+        return "redirect:/public/cards";
     }
 }

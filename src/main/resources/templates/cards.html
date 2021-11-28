@@ -21,7 +21,7 @@
                 <a sec:authorize="hasRole('ADMIN')"
                    th:href="@{/private/cards/update(id=${card.id})}" class="btn btn-primary">Update</a>
                <a  sec:authorize="hasRole('ADMIN')"
-                   th:href="@{/cards/{id}/delete(id=${card.id})}"
+                   th:href="@{/private/cards/{id}/delete(id=${card.id})}"
                        class="btn btn-danger"
                        th:text="#{com.eshop.cards.delete}"></a>
             </div>
@@ -38,7 +38,7 @@
                     th:classappend="${pageOfCards.number eq 0 ? 'disabled':''}">
                     <a class="page-link"
                        aria-label="Previous"
-                       th:href="@{/cards/(page=${pageOfCards.number}-1,sort=${sort}+',ignorecase')}">
+                       th:href="@{/public/cards/(page=${pageOfCards.number}-1,sort=${sort}+',ignorecase')}">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
@@ -46,14 +46,14 @@
                     th:each="pageNumb:${#numbers.sequence(0,pageOfCards.totalPages -1)}"
                     th:classappend="${pageNumb eq pageOfCards.number ? 'active':''}">
                     <a class="page-link"
-                       th:href="@{cards(page=${pageNumb},sort=${sort}+',ignorecase')}"
+                       th:href="@{/public/cards(page=${pageNumb},sort=${sort}+',ignorecase')}"
                        th:text="${pageNumb}+1"></a>
                 </li>
                 <li class="page-item"
                     th:classappend="${pageOfCards.number eq pageOfCards.totalPages -1 ? 'disabled':''}">
                     <a class="page-link"
                        aria-label="Next"
-                       th:href="@{/cards/(page=${pageOfCards.number}+1,sort=${sort}+',ignorecase' )}"
+                       th:href="@{/public/cards/(page=${pageOfCards.number}+1,sort=${sort}+',ignorecase' )}"
                     >
                         <span aria-hidden="true">&raquo;</span>
                     </a>

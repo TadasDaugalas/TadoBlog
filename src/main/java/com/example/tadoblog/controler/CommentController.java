@@ -44,7 +44,7 @@ public class CommentController {
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
-    @PostMapping(value = {"/private/cards/readMore/{id}/editComment/{commentId}"})
+    @PostMapping("/private/cards/readMore/{id}/editComment/{commentId}")
     public String editComment(@PathVariable UUID id, @PathVariable UUID commentId, Comment comment){
         Comment commentFromDb = commentService.getComment(commentId);
         commentFromDb.setCommentText(comment.getCommentText());
