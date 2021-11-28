@@ -27,7 +27,7 @@ public class CommentController {
         this.userService = userService;
     }
 
-        @PostMapping(value = {"/cards/readMore/{id}/addComment","/cards/readMore/{id}/addComment/{commentId}"})
+    @PostMapping(value = {"/cards/readMore/{id}/addComment","/cards/readMore/{id}/addComment/{commentId}"})
     public String addComment(@PathVariable UUID id, @PathVariable(required = false) UUID commentId, Comment comment, Principal principal){
         Card card = cardService.getCard(id);
         comment.setCard(card);
@@ -35,13 +35,21 @@ public class CommentController {
           User user = userService.getUser(currentUserId);
           comment.setUser(user);
         if(commentId != null){
-            Optional<Comment> parentComment = commentService.getComment(commentId);
-            if(parentComment.isPresent()){
-                comment.setParentComment(parentComment.get());
-            }
+            Comment parentComment = commentService.getComment(commentId);
+            comment.setParentComment(parentComment);
         }
         commentService.saveComment(comment);
         return "redirect:/cards";
+    }
+
+
+    @PostMapping(value = {"/cards/readMore/{id}/editComment/{commentId}"})
+    public String editComment(@PathVariable UUID id, @PathVariable UUID commentId, Comment comment){
+        Comment commentFromDb = commentService.getComment(commentId);
+        commentFromDb.setCommentText(comment.getCommentText());
+        commentService.saveComment(commentFromDb);
+
+        return "redirect:/cards/readMore?id=" + id;
     }
 
 }

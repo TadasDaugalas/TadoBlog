@@ -24,13 +24,13 @@ public class Comment {
     @Type(type = "uuid-char")
     private UUID id;
     private String commentText;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="card_id", nullable=false)
     private Card card;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="user_id", nullable=false)
     private User user;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="parent_comment_id", referencedColumnName = "id")
     private Comment parentComment;
 
