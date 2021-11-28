@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head th:replace="fragments/fragments :: head(#{com.example.tadoblog.readmore.title})"></head>
 <body>
 <header th:insert="fragments/fragments :: navigation"></header>
@@ -16,9 +17,9 @@
             </div>
         </div>
         <div class="container">
-            <div class="input-group mb-3">
-                <form th:method="post" th:object="${comment}"
-                      th:action="@{/cards/readMore/{id}/addComment(id=${readMore.id})}">
+            <div sec:authorize="hasAnyRole('ADMIN','USER')" class="input-group mb-3">
+                <form  th:method="post" th:object="${comment}"
+                      th:action="@{/private/cards/readMore/{id}/addComment(id=${readMore.id})}">
                     <input type="text"
                            class="form-control"
                            placeholder="Recipient's username"
@@ -30,18 +31,18 @@
             Comments
             <div th:each="comment : ${readMore.comments}" th:if="${comment.getParentComment() == null}">
                 <div th:text="${comment.commentText}"></div>
-                <a th:if="${comment.getUser().getId().equals(currentUserId) && !comment.getId().equals(editCommentId)}" th:href="@{/cards/readMore/{id}/editComment/{commentId}(id=${readMore.id},commentId=${comment.id})}"class="btn btn-light">Edit</a>
-                <a th:if="${comment.getUser().getId().equals(currentUserId)}" th:href="@{/cards/readMore/{id}/removeComment/{commentId}(id=${readMore.id},commentId=${comment.id})}" class="btn btn-light">REMOVE</a>
-                <a th:if="${!comment.getId().equals(replyCommentId)}" th:href="@{/cards/readMore/{id}/replyComment/{commentId}(id=${readMore.id},commentId=${comment.id})}" class="btn btn-light">Reply</a>
+                <a th:if="${comment.getUser().getId().equals(currentUserId) && !comment.getId().equals(editCommentId)}" th:href="@{/private/cards/readMore/{id}/editComment/{commentId}(id=${readMore.id},commentId=${comment.id})}"class="btn btn-light">Edit</a>
+                <a th:if="${comment.getUser().getId().equals(currentUserId)|| isAdmin}" th:href="@{/private/cards/readMore/{id}/removeComment/{commentId}(id=${readMore.id},commentId=${comment.id})}" class="btn btn-light">REMOVE</a>
+                <a sec:authorize="hasAnyRole('ADMIN','USER')" th:if="${!comment.getId().equals(replyCommentId)}" th:href="@{/private/cards/readMore/{id}/replyComment/{commentId}(id=${readMore.id},commentId=${comment.id})}" class="btn btn-light">Reply</a>
                 <form th:if="${comment.getId().equals(editCommentId)}" th:method="post" th:object="${comment}"
-                      th:action="@{/cards/readMore/{id}/editComment/{commentId}(id=${readMore.id},commentId=${comment.id})}">
+                      th:action="@{/private/cards/readMore/{id}/editComment/{commentId}(id=${readMore.id},commentId=${comment.id})}">
                     <input type="text"
                            class="form-control"
                            th:field="*{commentText}">
                     <button class="btn btn-outline-secondary" type="submit" id="button-addona">Save</button>
                 </form>
                 <form th:if="${comment.getId().equals(replyCommentId)}" th:method="post" th:object="${comment}"
-                      th:action="@{/cards/readMore/{id}/addComment/{commentId}(id=${readMore.id},commentId=${comment.id})}">
+                      th:action="@{/private/cards/readMore/{id}/addComment/{commentId}(id=${readMore.id},commentId=${comment.id})}">
                     <input type="text"
                            class="form-control"
                            placeholder="Recipient's username"
@@ -56,7 +57,7 @@
 
                     <a th:if="${childComment.getUser().getId().equals(currentUserId) && !childComment.getId().equals(editCommentId)}" th:href="@{/cards/readMore/{id}/editComment/{commentId}(id=${readMore.id},commentId=${childComment.id})}" type="button" class="btn btn-light">Edit</a>
                     <form th:if="${childComment.getId().equals(editCommentId)}" th:method="post" th:object="${comment}"
-                          th:action="@{/cards/readMore/{id}/editComment/{commentId}(id=${readMore.id},commentId=${childComment.id})}">
+                          th:action="@{/private/cards/readMore/{id}/editComment/{commentId}(id=${readMore.id},commentId=${childComment.id})}">
                         <input type="text"
                                class="form-control"
                                th:field="*{commentText}">

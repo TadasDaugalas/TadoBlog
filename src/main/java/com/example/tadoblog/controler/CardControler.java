@@ -2,6 +2,7 @@ package com.example.tadoblog.controler;
 
 import com.example.tadoblog.data.Card;
 import com.example.tadoblog.data.Comment;
+import com.example.tadoblog.data.Role;
 import com.example.tadoblog.data.User;
 import com.example.tadoblog.service.CardService;
 import com.example.tadoblog.service.CommentService;
@@ -9,6 +10,7 @@ import com.example.tadoblog.service.MessageService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,10 +19,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Optional;
 import java.util.UUID;
 
 @Controller
-@RequestMapping("/cards")
 public class CardControler {
     private final CardService cardService;
     private final MessageService messageService;
@@ -31,8 +33,8 @@ public class CardControler {
         this.messageService = messageService;
         this.commentService = commentService;
     }
-
-    @GetMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/private/cards/create")
     public String loadCardForm(Model model, String message) {
         model.addAttribute("card", new Card());
         if (message != null) {
@@ -40,61 +42,64 @@ public class CardControler {
         }
         return "card";
     }
-
-    @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/private/cards/create")
     public String createCard(@Valid Card card, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "card";
         }
         cardService.saveCard(card);
-        return "redirect:/cards/create?message=com.eshop.card.create.succ";
+        return "redirect:/private/cards/create?message=com.eshop.card.create.succ";
     }
 
-    @GetMapping
+    @GetMapping("/public/cards")
     public String loadCards(Model model, @PageableDefault(size = 2) @SortDefault(sort = ("cardTitle"), caseSensitive = false) Pageable pageable) {
         model.addAttribute("pageOfCards", cardService.getCard(pageable));
         return "cards";
     }
-
-    @GetMapping("/update")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/private/cards/update")
     public String loadUpdateCard(Model model,@RequestParam UUID id) {
         model.addAttribute("card", cardService.getCard(id));
-        return "/card";
+        return "card";
     }
-
-    @PostMapping("/update/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/private/cards/update/{id}")
     public String updateCard(@PathVariable UUID id, Card card) {
         card.setId(id);
         cardService.updateCard(card);
-        return "redirect:/cards";
+        return "redirect:/public/cards";
     }
-
-    @GetMapping("/{id}/delete")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/private/cards/{id}/delete")
     public String deleteCard(@PathVariable UUID id) {
         cardService.deleteCard(id);
-        return "redirect:/cards";
+        return "redirect:/public/cards";
     }
-    @GetMapping("/readMore/{id}/editComment/{commentId}")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    @GetMapping("/private/cards/readMore/{id}/editComment/{commentId}")
     public String editComment(@PathVariable UUID id, @PathVariable UUID commentId, Model model, Principal principal) {
         Comment comment = commentService.getComment(commentId);
         addAttributes(model, principal, id, commentId,new UUID(0L, 0L), comment.getCommentText());
         return "readMore";
     }
-    @GetMapping("/readMore/{id}/replyComment/{commentId}")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    @GetMapping("/private/cards/readMore/{id}/replyComment/{commentId}")
     public String replyComment(@PathVariable UUID id, @PathVariable UUID commentId, Model model, Principal principal) {
         addAttributes(model, principal, id,new UUID(0L, 0L), commentId, null);
         return "readMore";
     }
-    @GetMapping("/readMore")
+    @GetMapping("/public/cards/readMore")
     public String loadOneCard(@RequestParam UUID id, Model model, Principal principal){
         addAttributes(model, principal, id, new UUID(0L, 0L),new UUID(0L, 0L), null);
         return "readMore";
     }
-    @GetMapping("/readMore/{id}/removeComment/{commentId}")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    @GetMapping("/private/cards/readMore/{id}/removeComment/{commentId}")
     public String removeComment(@PathVariable UUID id, @PathVariable UUID commentId, Model model, Principal principal) {
         commentService.removeComment(commentId);
         addAttributes(model, principal, id,new UUID(0L, 0L),new UUID(0L, 0L), null);
-        return "redirect:/cards/readMore?id=" + id;
+        return "redirect:/public/cards/readMore?id=" + id;
     }
 
     private void addAttributes(Model model, Principal principal, UUID id, UUID editCommentId,UUID replyCommentId, String commentText) {
@@ -105,7 +110,14 @@ public class CardControler {
         }
         model.addAttribute("replyCommentId",replyCommentId);
         model.addAttribute("comment",comment);
-        model.addAttribute("currentUserId", ((User)((UsernamePasswordAuthenticationToken)principal).getPrincipal()).getId());
+        if(principal != null){
+            User user = (User)((UsernamePasswordAuthenticationToken)principal).getPrincipal();
+            Optional<Role> role = user.getRoles().stream().filter(i -> i.getAuthority().equals("ROLE_ADMIN")).findAny();
+            model.addAttribute("isAdmin", role.isPresent());
+            model.addAttribute("currentUserId", user.getId());
+        } else {
+            model.addAttribute("isAdmin", false);
+        }
         model.addAttribute("editCommentId", editCommentId);
     }
 }
