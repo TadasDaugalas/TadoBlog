@@ -30,8 +30,9 @@
             Comments
             <div th:each="comment : ${readMore.comments}" th:if="${comment.getParentComment() == null}">
                 <div th:text="${comment.commentText}"></div>
-                <a th:if="${comment.getUser().getId().equals(currentUserId) && !comment.getId().equals(editCommentId)}" th:href="@{/cards/readMore/{id}/editComment/{commentId}(id=${readMore.id},commentId=${comment.id})}" type="button" class="btn btn-light">Edit</a>
-                <a th:if="${!comment.getId().equals(replyCommentId)}" th:href="@{/cards/readMore/{id}/replyComment/{commentId}(id=${readMore.id},commentId=${comment.id})}" type="button" class="btn btn-light">Reply</a>
+                <a th:if="${comment.getUser().getId().equals(currentUserId) && !comment.getId().equals(editCommentId)}" th:href="@{/cards/readMore/{id}/editComment/{commentId}(id=${readMore.id},commentId=${comment.id})}"class="btn btn-light">Edit</a>
+                <a th:if="${comment.getUser().getId().equals(currentUserId)}" th:href="@{/cards/readMore/{id}/removeComment/{commentId}(id=${readMore.id},commentId=${comment.id})}" class="btn btn-light">REMOVE</a>
+                <a th:if="${!comment.getId().equals(replyCommentId)}" th:href="@{/cards/readMore/{id}/replyComment/{commentId}(id=${readMore.id},commentId=${comment.id})}" class="btn btn-light">Reply</a>
                 <form th:if="${comment.getId().equals(editCommentId)}" th:method="post" th:object="${comment}"
                       th:action="@{/cards/readMore/{id}/editComment/{commentId}(id=${readMore.id},commentId=${comment.id})}">
                     <input type="text"

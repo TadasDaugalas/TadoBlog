@@ -33,6 +33,8 @@ public class Comment {
     @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
     @JoinColumn(name="parent_comment_id", referencedColumnName = "id")
     private Comment parentComment;
+    @OneToMany(mappedBy = "parentComment" ,fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
+    private Set<Comment> childrenComments;
 
     }
 

@@ -90,6 +90,12 @@ public class CardControler {
         addAttributes(model, principal, id, new UUID(0L, 0L),new UUID(0L, 0L), null);
         return "readMore";
     }
+    @GetMapping("/readMore/{id}/removeComment/{commentId}")
+    public String removeComment(@PathVariable UUID id, @PathVariable UUID commentId, Model model, Principal principal) {
+        commentService.removeComment(commentId);
+        addAttributes(model, principal, id,new UUID(0L, 0L),new UUID(0L, 0L), null);
+        return "redirect:/cards/readMore?id=" + id;
+    }
 
     private void addAttributes(Model model, Principal principal, UUID id, UUID editCommentId,UUID replyCommentId, String commentText) {
         model.addAttribute("readMore",cardService.getOneCardData(id));

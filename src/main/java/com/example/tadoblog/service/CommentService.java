@@ -5,7 +5,6 @@ import com.example.tadoblog.exeption.CardNotExistExeption;
 import com.example.tadoblog.repository.JPACommentRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -20,5 +19,8 @@ public class CommentService {
     }
     public Comment getComment(UUID uuid){
       return  jpaCommentRepository.findById(uuid).orElseThrow(()-> new CardNotExistExeption(uuid));
+    }
+    public void removeComment(UUID uuid){
+        jpaCommentRepository.deleteById(uuid);
     }
 }
