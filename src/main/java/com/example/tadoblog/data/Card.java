@@ -24,6 +24,6 @@ public class Card {
     @NotBlank
     @Column(columnDefinition = "TEXT")
     private String cardText;
-    @OneToMany(mappedBy = "card" ,fetch = FetchType.EAGER ,cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "card", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private Set<Comment> comments;
 }

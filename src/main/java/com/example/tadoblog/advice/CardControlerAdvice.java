@@ -1,4 +1,5 @@
 package com.example.tadoblog.advice;
+
 import com.example.tadoblog.exeption.CardNotExistExeption;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.ui.Model;
@@ -16,18 +17,20 @@ import java.util.Date;
 public class CardControlerAdvice {
 
     @ExceptionHandler(CardNotExistExeption.class)
-    public String hanglingProductNotExist(CardNotExistExeption cardNotExistExeption, Model model){
-        model.addAttribute("cardId" , cardNotExistExeption.getCardId());
+    public String hanglingProductNotExist(CardNotExistExeption cardNotExistExeption, Model model) {
+        model.addAttribute("cardId", cardNotExistExeption.getCardId());
 
         return "cardNotFound";
     }
+
     @InitBinder
-    public void initStringBinder(WebDataBinder webDataBinder){
+    public void initStringBinder(WebDataBinder webDataBinder) {
         PropertyEditor editor = new StringTrimmerEditor(true);
-        webDataBinder.registerCustomEditor(String.class,editor);
+        webDataBinder.registerCustomEditor(String.class, editor);
     }
+
     @ModelAttribute("currentDate")
-    public Date currentDate(){
+    public Date currentDate() {
         return new Date();
     }
 }

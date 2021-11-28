@@ -11,7 +11,6 @@ public class UserRegistrationValidator implements Validator {
     public boolean supports(Class<?> clazz) {
         return UserRegistration.class.isAssignableFrom(clazz);
     }
-
     @Override
     public void validate(Object target, Errors errors) {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors,"name","userRegistrationValidator.name");

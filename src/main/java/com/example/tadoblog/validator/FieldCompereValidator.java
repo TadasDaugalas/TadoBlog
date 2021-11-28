@@ -24,7 +24,6 @@ public class FieldCompereValidator implements ConstraintValidator<FieldComperato
 
             return firstValue!=null && firstValue.equals(secondValue);
         } catch (Exception e) {
-            //TODO log exeption
         }
 
         return false;
