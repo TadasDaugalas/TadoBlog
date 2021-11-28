@@ -30,30 +30,38 @@
             Comments
             <div th:each="comment : ${readMore.comments}" th:if="${comment.getParentComment() == null}">
                 <div th:text="${comment.commentText}"></div>
-                <a th:if="${comment.getUser().getId().equals(currentUserId) && !comment.getId().equals(editComment)}" th:href="@{/cards/readMore/{id}/editComment/{commentId}(id=${readMore.id},commentId=${comment.id})}" type="button" class="btn btn-light">Edit</a>
-                <form th:if="${comment.getId().equals(editComment)}" th:method="post" th:object="${comment}"
+                <a th:if="${comment.getUser().getId().equals(currentUserId) && !comment.getId().equals(editCommentId)}" th:href="@{/cards/readMore/{id}/editComment/{commentId}(id=${readMore.id},commentId=${comment.id})}" type="button" class="btn btn-light">Edit</a>
+                <a th:if="${!comment.getId().equals(replyCommentId)}" th:href="@{/cards/readMore/{id}/replyComment/{commentId}(id=${readMore.id},commentId=${comment.id})}" type="button" class="btn btn-light">Reply</a>
+                <form th:if="${comment.getId().equals(editCommentId)}" th:method="post" th:object="${comment}"
                       th:action="@{/cards/readMore/{id}/editComment/{commentId}(id=${readMore.id},commentId=${comment.id})}">
                     <input type="text"
                            class="form-control"
                            th:field="*{commentText}">
                     <button class="btn btn-outline-secondary" type="submit" id="button-addona">Save</button>
                 </form>
+                <form th:if="${comment.getId().equals(replyCommentId)}" th:method="post" th:object="${comment}"
+                      th:action="@{/cards/readMore/{id}/addComment/{commentId}(id=${readMore.id},commentId=${comment.id})}">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Recipient's username"
+                           th:field="*{commentText}">
+                    <button class="btn btn-outline-secondary" type="submit" id="button-addon">Reply</button>
+                </form>
+
                 <div class="ps-5"
                      th:each="childComment : ${readMore.comments}"
-                     th:if="${childComment.getParentComment() != null && childComment.getParentComment().getId().equals(comment.getId())}"
-                     th:text="${childComment.commentText}">
+                     th:if="${childComment.getParentComment() != null && childComment.getParentComment().getId().equals(comment.getId())}">
+                    <div th:text="${childComment.commentText}"></div>
+
+                    <a th:if="${childComment.getUser().getId().equals(currentUserId) && !childComment.getId().equals(editCommentId)}" th:href="@{/cards/readMore/{id}/editComment/{commentId}(id=${readMore.id},commentId=${childComment.id})}" type="button" class="btn btn-light">Edit</a>
+                    <form th:if="${childComment.getId().equals(editCommentId)}" th:method="post" th:object="${comment}"
+                          th:action="@{/cards/readMore/{id}/editComment/{commentId}(id=${readMore.id},commentId=${childComment.id})}">
+                        <input type="text"
+                               class="form-control"
+                               th:field="*{commentText}">
+                        <button class="btn btn-outline-secondary" type="submit">Save</button>
+                    </form>
                 </div>
-
-
-<!--                <button type="button" class="btn btn-light">Reply</button>-->
-<!--                <form th:method="post" th:object="${comment}"-->
-<!--                      th:action="@{/cards/readMore/{id}/addComment/{commentId}(id=${readMore.id},commentId=${comment.id})}">-->
-<!--                    <input type="text"-->
-<!--                           class="form-control"-->
-<!--                           placeholder="Recipient's username"-->
-<!--                           th:field="*{commentText}">-->
-<!--                    <button class="btn btn-outline-secondary" type="submit" id="button-addon">Reply</button>-->
-<!--                </form>-->
             </div>
         </div>
     </div>

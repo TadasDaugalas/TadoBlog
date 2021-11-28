@@ -76,23 +76,29 @@ public class CardControler {
     @GetMapping("/readMore/{id}/editComment/{commentId}")
     public String editComment(@PathVariable UUID id, @PathVariable UUID commentId, Model model, Principal principal) {
         Comment comment = commentService.getComment(commentId);
-        addAttributes(model, principal, id, commentId, comment.getCommentText());
+        addAttributes(model, principal, id, commentId,new UUID(0L, 0L), comment.getCommentText());
+        return "readMore";
+    }
+    @GetMapping("/readMore/{id}/replyComment/{commentId}")
+    public String replyComment(@PathVariable UUID id, @PathVariable UUID commentId, Model model, Principal principal) {
+        addAttributes(model, principal, id,new UUID(0L, 0L), commentId, null);
         return "readMore";
     }
     @GetMapping("/readMore")
     public String loadOneCard(@RequestParam UUID id, Model model, Principal principal){
-        addAttributes(model, principal, id, new UUID(0L, 0L), null);
+        addAttributes(model, principal, id, new UUID(0L, 0L),new UUID(0L, 0L), null);
         return "readMore";
     }
 
-    private void addAttributes(Model model, Principal principal, UUID id, UUID editCommentId, String commentText) {
+    private void addAttributes(Model model, Principal principal, UUID id, UUID editCommentId,UUID replyCommentId, String commentText) {
         model.addAttribute("readMore",cardService.getOneCardData(id));
         Comment comment = new Comment();
         if (commentText != null) {
             comment.setCommentText(commentText);
         }
+        model.addAttribute("replyCommentId",replyCommentId);
         model.addAttribute("comment",comment);
         model.addAttribute("currentUserId", ((User)((UsernamePasswordAuthenticationToken)principal).getPrincipal()).getId());
-        model.addAttribute("editComment", editCommentId);
+        model.addAttribute("editCommentId", editCommentId);
     }
 }
