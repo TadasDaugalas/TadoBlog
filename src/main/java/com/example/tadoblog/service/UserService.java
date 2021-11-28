@@ -3,6 +3,7 @@ package com.example.tadoblog.service;
 import com.example.tadoblog.data.Role;
 import com.example.tadoblog.data.User;
 import com.example.tadoblog.data.UserRegistration;
+import com.example.tadoblog.exeption.CardNotExistExeption;
 import com.example.tadoblog.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -25,6 +27,9 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(String.format("User %s does not exist", username)));
+    }
+    public User getUser(UUID uuid){
+        return userRepository.findById(uuid).orElseThrow(()-> new CardNotExistExeption(uuid));
     }
 
     public void createNewUser(UserRegistration registration) {
