@@ -15,7 +15,7 @@ import java.util.UUID;
 @Entity
 public class Card {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "varchar(36)", nullable = false, updatable = false)
     @Type(type = "uuid-char")
     private UUID id;
@@ -24,6 +24,6 @@ public class Card {
     @NotBlank
     @Column(columnDefinition = "TEXT")
     private String cardText;
-    @OneToMany(mappedBy = "card" ,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "card" ,fetch = FetchType.EAGER ,cascade = CascadeType.REMOVE)
     private Set<Comment> comments;
 }

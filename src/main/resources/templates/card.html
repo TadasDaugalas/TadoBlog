@@ -12,7 +12,30 @@
 <body>
 <div class="container">
     <h2 th:text="#{com.eshop.card.createNew}"></h2>
-    <form method="post" th:object="${card}">
+    <form method="post" th:if="${card.getId() ne null}" th:object="${card}" th:action="@{/cards/update/{id}(id=${card.id})}">
+        <div class="col-md-4">
+            <label class="form-label" th:text="#{com.eshop.card.form.title}"></label>
+            <input class="form-control"
+                   type="text"
+                   placeholder="Blog Title"
+                   th:field="*{cardTitle}"
+                   th:classappend="${#fields.hasErrors('cardTitle')} ? 'is-invalid' :'valid'">
+            <p class="invalid-feedback" th:if="${#fields.hasErrors('cardTitle')}" th:errors="*{cardTitle}"></p>
+        </div>
+
+        <div class="col-md-4">
+            <label th:text="#{com.eshop.card.form.text}"></label>
+            <textarea class="form-control"
+                      type="text"
+                      placeholder="Blod text"
+                      th:field="*{cardText}"
+                      th:classappend="${#fields.hasErrors('cardText')} ? 'is-invalid' :'valid'"></textarea>
+            <p class="invalid-feedback" th:if="${#fields.hasErrors('cardText')}" th:errors="*{cardText}"></p>
+        </div>
+        <button type="submit" th:text="#{com.eshop.card.form.createCard}"></button>
+        <div th:if="${success}" th:text="${success}"></div>
+    </form>
+    <form method="post" th:if="${card.getId() eq null}" th:object="${card}" th:action="@{/cards/create}">
         <div class="col-md-4">
             <label class="form-label" th:text="#{com.eshop.card.form.title}"></label>
             <input class="form-control"
@@ -34,6 +57,7 @@
         </div>
         <button type="submit" th:text="#{com.eshop.card.form.createCard}"></button>
         <div th:if="${success}" th:text="${success}"></div>
+    </form>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

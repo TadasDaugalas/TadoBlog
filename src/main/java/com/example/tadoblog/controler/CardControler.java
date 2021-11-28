@@ -62,8 +62,9 @@ public class CardControler {
         return "/card";
     }
 
-    @PostMapping("/update")
-    public String updateCard(Card card) {
+    @PostMapping("/update/{id}")
+    public String updateCard(@PathVariable UUID id, Card card) {
+        card.setId(id);
         cardService.updateCard(card);
         return "redirect:/cards";
     }
