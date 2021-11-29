@@ -17,9 +17,9 @@
             <div class="card-body">
                 <h5 th:text="${card.cardTitle}" class="card-title"></h5>
                 <p th:text="${card.cardText}" class="card-text text-truncate" style="max-width: 350px"></p>
-                <a th:href="@{/public/cards/readMore(id=${card.id})}" class="btn btn-primary">Read more</a>
+                <a th:href="@{/public/cards/readMore(id=${card.id})}" class="btn btn-primary" th:text="#{com.readMore}"></a>
                 <a sec:authorize="hasRole('ADMIN')"
-                   th:href="@{/private/cards/update(id=${card.id})}" class="btn btn-primary">Update</a>
+                   th:href="@{/private/cards/update(id=${card.id})}" class="btn btn-primary" th:text="#{com.update}"></a>
                <a  sec:authorize="hasRole('ADMIN')"
                    th:href="@{/private/cards/{id}/delete(id=${card.id})}"
                        class="btn btn-danger"
@@ -60,16 +60,9 @@
                 </li>
             </ul>
         </nav>
-<!--        <div class="col-2 text-end">-->
-<!--            <span th:text="#{com.eshop.products.table.totalProducts}+' '+${pageOfProducts.totalElements}"></span>-->
-<!--        </div>-->
     </div>
 </main>
 <div th:replace="fragments/fragments :: footer"></div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-        crossorigin="anonymous"></script>
 </body>
 
 </html>

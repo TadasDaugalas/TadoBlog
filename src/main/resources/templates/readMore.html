@@ -22,31 +22,33 @@
                       th:action="@{/private/cards/readMore/{id}/addComment(id=${readMore.id})}">
                     <input type="text"
                            class="form-control"
-                           placeholder="Comment text"
+                           th:placeholder="#{com.commentText.placeholder}"
                            th:field="*{commentText}">
-                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Add Comment</button>
+                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2" th:text="#{com.add.Comment}"></button>
                 </form>
             </div>
                 <h2 th:text="#{com.blog.comments}"></h2>
             <div th:each="comment : ${readMore.comments}" th:if="${comment.getParentComment() == null}">
                 <div class="pt-3" th:text="${comment.getUser().name} + ' : '+${comment.commentText}"></div>
-                <a th:if="${comment.getUser().getId().equals(currentUserId) && !comment.getId().equals(editCommentId)}" th:href="@{/private/cards/readMore/{id}/editComment/{commentId}(id=${readMore.id},commentId=${comment.id})}"class="btn btn-light">Edit</a>
-                <a th:if="${comment.getUser().getId().equals(currentUserId)|| isAdmin}" th:href="@{/private/cards/readMore/{id}/removeComment/{commentId}(id=${readMore.id},commentId=${comment.id})}" class="btn btn-light">REMOVE</a>
-                <a sec:authorize="hasAnyRole('ADMIN','USER')" th:if="${!comment.getId().equals(replyCommentId)}" th:href="@{/private/cards/readMore/{id}/replyComment/{commentId}(id=${readMore.id},commentId=${comment.id})}" class="btn btn-light">Reply</a>
+                <a th:if="${comment.getUser().getId().equals(currentUserId) && !comment.getId().equals(editCommentId)}"
+                   th:href="@{/private/cards/readMore/{id}/editComment/{commentId}(id=${readMore.id},commentId=${comment.id})}"class="btn btn-light" th:text="#{com.edit}"></a>
+                <a th:if="${comment.getUser().getId().equals(currentUserId)|| isAdmin}"
+                   th:href="@{/private/cards/readMore/{id}/removeComment/{commentId}(id=${readMore.id},commentId=${comment.id})}" class="btn btn-light" th:text="#{com.remove}"></a>
+                <a sec:authorize="hasAnyRole('ADMIN','USER')" th:if="${!comment.getId().equals(replyCommentId)}" th:href="@{/private/cards/readMore/{id}/replyComment/{commentId}(id=${readMore.id},commentId=${comment.id})}" class="btn btn-light" th:text=" #{com.reply}"></a>
                 <form th:if="${comment.getId().equals(editCommentId)}" th:method="post" th:object="${comment}"
                       th:action="@{/private/cards/readMore/{id}/editComment/{commentId}(id=${readMore.id},commentId=${comment.id})}">
                     <input type="text"
                            class="form-control"
                            th:field="*{commentText}">
-                    <button class="btn btn-outline-secondary" type="submit" id="button-addona">Save</button>
+                    <button class="btn btn-outline-secondary" type="submit" id="button-addona" th:text="#{com.save}"></button>
                 </form>
                 <form th:if="${comment.getId().equals(replyCommentId)}" th:method="post" th:object="${comment}"
                       th:action="@{/private/cards/readMore/{id}/addComment/{commentId}(id=${readMore.id},commentId=${comment.id})}">
                     <input type="text"
                            class="form-control"
-                           placeholder="Comment area"
+                           th:placeholder="#{com.commentText.placeholder}"
                            th:field="*{commentText}">
-                    <button class="btn btn-outline-secondary" type="submit" id="button-addon">Reply</button>
+                    <button class="btn btn-outline-secondary" type="submit" id="button-addon" th:text="#{com.reply}"></button>
                 </form>
 
                 <div class="ps-5"
@@ -55,13 +57,13 @@
                     <div th:text="${childComment.getUser().name}+' : ' + ${childComment.commentText}"></div>
 
                     <a th:if="${childComment.getUser().getId().equals(currentUserId) && !childComment.getId().equals(editCommentId)}"
-                       th:href="@{private/cards/readMore/{id}/editComment/{commentId}(id=${readMore.id},commentId=${childComment.id})}" class="btn btn-light">Edit</a>
+                       th:href="@{/private/cards/readMore/{id}/editComment/{commentId}(id=${readMore.id},commentId=${childComment.id})}" class="btn btn-light" th:text="#{com.edit}"></a>
                     <form th:if="${childComment.getId().equals(editCommentId)}" th:method="post" th:object="${comment}"
                           th:action="@{/private/cards/readMore/{id}/editComment/{commentId}(id=${readMore.id},commentId=${childComment.id})}">
                         <input type="text"
                                class="form-control"
                                th:field="*{commentText}">
-                        <button class="btn btn-outline-secondary" type="submit">Save</button>
+                        <button class="btn btn-outline-secondary" type="submit" th:text="#{com.save}"></button>
                     </form>
                 </div>
             </div>
@@ -69,7 +71,5 @@
     </div>
 </main>
 <footer th:replace="fragments/fragments :: footer"></footer>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>
